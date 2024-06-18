@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 
 private const val NUM_FIELDS = 8
 private const val TIME_FIELD = 0
-private const val WIND_FIELD = 2
+private const val WIND_FIELD = 1
 private const val TEMP_FIELD = 4
 private const val SUN_FIELD = 6
 private const val HUMID_FIELD = 7
