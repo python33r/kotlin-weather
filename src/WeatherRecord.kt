@@ -8,11 +8,11 @@ import java.time.format.DateTimeFormatter
  * - Combined date & time
  * - Wind speed (metres per second)
  * - Air temperature (Celsius)
- * - Solar irradiance (Joules per square metre per seond)
+ * - Solar irradiance (Watts per square metre)
  * - Relative humidity (%)
  *
- * Date & time are required but the meteorological properties are
- * all optional.
+ * A proper date & time is always required but the meteorological
+ * properties can be null in order to represent missing measurements.
  */
 data class WeatherRecord(
     val time: LocalDateTime,

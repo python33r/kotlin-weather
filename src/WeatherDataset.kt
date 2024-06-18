@@ -138,7 +138,7 @@ class WeatherDataset private constructor() {
      * Computes total solar insolation for a given date.
      *
      * @param[date] Date for which insolation must be computed
-     * @return Insolation (Watts per square metre) and number of hours
+     * @return Insolation (Joules per square metre) and number of hours
      */
     fun insolation(date: LocalDate): Pair<Double,Int> {
         with (records.filter { it.time.toLocalDate() == date }) {
