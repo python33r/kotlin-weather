@@ -20,17 +20,11 @@ fun main(args: Array<String>) {
 
 private fun displaySummaryOf(dataset: WeatherDataset) {
     with(dataset) {
-        println("\n${size} valid records acquired")
-        skippedBadFormat.let {
-            if (it > 0) {
-                println("$it skipped due to invalid format")
-            }
-        }
-        skippedEmptyField.let {
-            if (it > 0) {
-                println("$it skipped due to empty fields")
-            }
-        }
+        println("\n${size} valid records, ${skipped} skipped\n")
+        println("Missing wind speed  : $missingWindSpeed")
+        println("Missing temperature : $missingTemperature")
+        println("Missing irradiance  : $missingIrradiance")
+        println("Missing humidity    : $missingHumidity")
     }
 }
 
@@ -38,18 +32,19 @@ private fun displayWeatherInfoFor(dataset: WeatherDataset) {
     with(System.out) {
         with(dataset) {
             maxWindSpeed()?.let {
-                printf("\nHighest wind speed: %.1f m/s\n", it.windSpeed)
+                printf("\nHighest wind speed = %.1f m/s\n", it.windSpeed)
                 displayTime(it.time)
             }
             minHumidity()?.let {
-                printf("Lowest humidity: %.1f%%\n", it.humidity)
+                printf("Lowest humidity = %.1f%%\n", it.humidity)
                 displayTime(it.time)
             }
             maxTemperature()?.let {
-                printf("Highest temperature: %.1f\u00b0C\n", it.temperature)
+                printf("Highest temperature = %.1f\u00b0C\n", it.temperature)
                 displayTime(it.time)
                 val date = it.time.toLocalDate()
-                printf("Insolation on %s: %.4g J/m\u00b2\n", date, insolation(date))
+                val (insol, hours) = insolation(date)
+                printf("Insolation on %s: %.4g J/m\u00b2 (%d hours)\n", date, insol, hours)
             }
         }
     }
