@@ -1,6 +1,13 @@
 import java.time.LocalDateTime
 import kotlin.system.exitProcess
 
+/**
+ * Program entry point.
+ *
+ * A dataset filename must be provided on the command line.
+ *
+ * @param[args] Array of command line arguments
+ */
 fun main(args: Array<String>) {
     if (args.isEmpty()) {
         println("Error: filename argument required")
