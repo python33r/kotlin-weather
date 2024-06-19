@@ -34,11 +34,22 @@ Columns in theses files are as follows:
 
 ### Data Quality Notes
 
+Quoting from the [details given on data.gov.uk][src]:
+
 * "There are periods where the bearings in the wind vane have not been 
   moving freely and may have affected accuracy of the direction in low wind
   speeds etc."
 
-* "Blank sections are due to servicing of, or faults with the equipment."
+* "Blank sections are due to servicing of, or faults, with the equipment."
+
+In the case of irradiance, however, missing values are mostly just the
+the natural consequence of the day-night cycle.
+
+### Data Licensing
+
+Modification of the datasets and their inclusion in this repository are
+permitted under the terms of the [Open Government License][ogl].
 
 [src]: https://www.data.gov.uk/dataset/4afd0747-4fba-49c4-b0aa-b6f093a7db2c/leeds-meteorological-data
 [loc]: https://maps.app.goo.gl/Gvx65nNL4t1keH8s8
+[ogl]: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/

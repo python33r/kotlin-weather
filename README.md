@@ -3,6 +3,27 @@
 Kotlin classes and a Kotlin application for analysing weather station data
 read from a CSV file - see `data/README.md` for details of the format.
 
+Note: `LICENSE` applies to the Kotlin code. The CSV files in the `data`
+directory are covered by the [Open Government License][ogl].
+
+## Application
+
+You can build the application from the command line with:
+
+```shell
+kotlinc -d weather.jar -include-runtime src/*.kt
+```
+
+You can subsequently run it with
+
+```shell
+kotlin weather.jar data/leeds_2019.csv
+```
+
+The application expects a CSV file as the sole command line argument.
+
+## Class Details
+
 A `WeatherRecord` object captures a subset of the data in one record
 from the CSV file, specifically: date & time, wind speed (metres per second),
 temperature (Celsius), solar irradiance (Watts per square metre), and
@@ -17,6 +38,7 @@ the dataset:
 ```kotlin
 val dataset = WeatherDataset("weather.csv")
 ```
+
 Records with the wrong number of fields, or a missing date & time field,
 or a badly formatted date & time field, will be skipped.
 
@@ -60,8 +82,9 @@ dataset.insolation(date)?.let {
 
 Note that the `insolation` method returns `null` if no records are available
 for the given date, otherwise a `Pair` containing the computed insolation
-and the numbr of hours over which solar irradiance was integrated.
+and the number of hours over which solar irradiance was integrated.
 `Pair(0.0, 0)` will be returned if the date is valid but no measurements
 of irradiance were acquired on that date for some reason.
 
+[ogl]: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
 [ins]: https://en.wikipedia.org/wiki/Solar_irradiance
