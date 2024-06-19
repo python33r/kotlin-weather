@@ -1,6 +1,7 @@
 import java.io.File
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.format.DateTimeParseException
 
 private const val NUM_FIELDS = 8
 private const val TIME_FIELD = 0
@@ -16,13 +17,14 @@ private const val SECONDS_IN_AN_HOUR = 3600
  *
  * A CSV file must be supplied in order to create a weather dataset.
  * Records from this file are stored and a count is kept of records that
- * couldn't be read successfully. Missing fields in one line of the file
- * map onto nulls in the corresponding record. You can query a dataset
- * to see how many missing measurements there are.
+ * couldn't be read successfully due to the wrong number of fields, or
+ * a missing or badly formatted date & time field. Missing fields in one
+ * line of the file map onto nulls in the corresponding record. You can
+ * query a dataset to see how many missing measurements there are.
  *
  * A weather dataset is somewhat list-like: you can query the number
  * of stored records via its `size` property, access an individual record
- * using `[]` with an integer index, and iterator over records using a
+ * using `[]` with an integer index, and iterate over records using a
  * for loop.
  *
  * A dataset can be queried to find the records with the highest wind
@@ -63,7 +65,7 @@ class WeatherDataset private constructor() {
                         val humid = get(HUMID_FIELD).toDoubleOrNull()
                         records.add(WeatherRecord(time, wind, temp, sun, humid))
                     }
-                    catch (error: Exception) {
+                    catch (error: DateTimeParseException) {
                         ++skipped
                     }
                 }
@@ -127,7 +129,7 @@ class WeatherDataset private constructor() {
         compareBy(nullsFirst()) { it.temperature })
 
     /**
-     * Find the record having the lowest humidity.
+     * Finds the record having the lowest humidity.
      *
      * @return A record, or null if there are no measurements of humidity
      */
@@ -136,6 +138,10 @@ class WeatherDataset private constructor() {
 
     /**
      * Computes total solar insolation for a given date.
+     *
+     * Presence of the date in this dataset is not checked, so a returned
+     * value of `Pair(0.0, 0)` could signify either that the date isn't
+     * present or that no irradiance measurements were recorded on that date.
      *
      * @param[date] Date for which insolation must be computed
      * @return Insolation (Joules per square metre) and number of hours
