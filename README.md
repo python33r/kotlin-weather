@@ -66,7 +66,7 @@ The following analysis methods are provided:
 * `minHumidity()`, to find the record having the lowest humidity
 
 Each of these can return `null` in the case of an empty dataset or a dataset
-in which measurements are available for the meteorological parameter of
+in which measurements are not available for the meteorological parameter of
 interest.
 
 In addition, the [insolation][ins] over a 24-hour period at the measurement
