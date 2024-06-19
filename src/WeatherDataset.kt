@@ -137,17 +137,20 @@ class WeatherDataset private constructor() {
         compareBy(nullsLast()) { it.humidity })
 
     /**
-     * Computes total solar insolation for a given date.
+     * Computes insolation for a given 24-hour period.
      *
-     * Presence of the date in this dataset is not checked, so a returned
-     * value of `Pair(0.0, 0)` could signify either that the date isn't
-     * present or that no irradiance measurements were recorded on that date.
+     * If the desired date isn't found in this dataset, `null` is returned.
+     * If the date is found, a pair is returned containing the insolation
+     * computed for that date and the number of hours over which irradiance
+     * was integrated.
      *
      * @param[date] Date for which insolation must be computed
-     * @return Insolation (Joules per square metre) and number of hours
+     * @return Insolation (Joules per square metre) and number of hours, or `null`
      */
-    fun insolation(date: LocalDate): Pair<Double,Int> {
-        with (records.filter { it.time.toLocalDate() == date }) {
+    fun insolation(date: LocalDate): Pair<Double,Int>? {
+        val recsOnDate = records.filter { it.time.toLocalDate() == date }
+        if (recsOnDate.isEmpty()) return null
+        with (recsOnDate) {
             val hours = count { it.solarIrradiance != null }
             val insolation = SECONDS_IN_AN_HOUR * sumOf { it.solarIrradiance ?: 0.0 }
             return Pair(insolation, hours)

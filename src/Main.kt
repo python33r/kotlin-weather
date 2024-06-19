@@ -27,7 +27,7 @@ fun main(args: Array<String>) {
 
 private fun displaySummaryOf(dataset: WeatherDataset) {
     with(dataset) {
-        println("\n${size} valid records, ${skipped} skipped\n")
+        println("\n$size valid records, $skipped skipped\n")
         println("Missing wind speed  : $missingWindSpeed")
         println("Missing temperature : $missingTemperature")
         println("Missing irradiance  : $missingIrradiance")
@@ -50,8 +50,10 @@ private fun displayWeatherInfoFor(dataset: WeatherDataset) {
                 printf("Highest temperature = %.1f\u00b0C\n", it.temperature)
                 displayTime(it.time)
                 val date = it.time.toLocalDate()
-                val (insol, hours) = insolation(date)
-                printf("Insolation on %s: %.4g J/m\u00b2 (%d hours)\n", date, insol, hours)
+                insolation(date)?.let { result ->
+                    printf("Insolation on %s: %.4g J/m\u00b2 (%d hours)\n",
+                        date, result.first, result.second)
+                }
             }
         }
     }
