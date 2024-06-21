@@ -1,5 +1,5 @@
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatter as Formatter
 
 /**
  * A single record from a weather station.
@@ -22,7 +22,7 @@ data class WeatherRecord(
     val humidity: Double?
 ) {
     companion object {
-        val TIME_FORMAT: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+        val TIME_FORMAT: Formatter = Formatter.ofPattern("dd/MM/yyyy HH:mm")
     }
 
     /**

@@ -148,9 +148,8 @@ class WeatherDataset private constructor() {
      * @return Insolation (Joules per square metre) and number of hours, or `null`
      */
     fun insolation(date: LocalDate): Pair<Double,Int>? {
-        val recsOnDate = records.filter { it.time.toLocalDate() == date }
-        if (recsOnDate.isEmpty()) return null
-        with (recsOnDate) {
+        with(records.filter { it.time.toLocalDate() == date }) {
+            if (isEmpty()) return null
             val hours = count { it.solarIrradiance != null }
             val insolation = SECONDS_IN_AN_HOUR * sumOf { it.solarIrradiance ?: 0.0 }
             return Pair(insolation, hours)
