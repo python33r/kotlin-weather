@@ -34,6 +34,10 @@ private const val SECONDS_IN_AN_HOUR = 3600
 class WeatherDataset(filename: String) {
     private val records = mutableListOf<WeatherRecord>()
 
+    // Caches
+    private val missing = mutableMapOf<String, Int>()
+    private val queries = mutableMapOf<String, WeatherRecord?>()
+
     /**
      * Number of records skipped due to errors
      */
@@ -76,22 +80,34 @@ class WeatherDataset(filename: String) {
     /**
      * Number of missing wind speed measurements
      */
-    val missingWindSpeed get() = records.count { it.windSpeed == null }
+    val missingWindSpeed
+        get() = missing.compute("windSpeed") { _, value ->
+            value ?: records.count { it.windSpeed == null }
+        }
 
     /**
      * Number of missing temperature measurements
      */
-    val missingTemperature get() = records.count { it.temperature == null }
+    val missingTemperature
+        get() = missing.compute("temperature") { _, value ->
+            value ?: records.count { it.temperature == null }
+        }
 
     /**
      * Number of missing solar irradiance measurements
      */
-    val missingIrradiance get() = records.count { it.solarIrradiance == null }
+    val missingIrradiance
+        get() = missing.compute("irradiance") { _, value ->
+            value ?: records.count { it.solarIrradiance == null }
+        }
 
     /**
      * Number of missing humidity measurements
      */
-    val missingHumidity get() = records.count { it.humidity == null }
+    val missingHumidity
+        get() = missing.compute("humidity") { _, value ->
+            value ?: records.count { it.humidity == null }
+        }
 
     /**
      * Retrieves a record from this dataset.
@@ -112,24 +128,27 @@ class WeatherDataset(filename: String) {
      *
      * @return A record, or null if there are no measurements of wind speed
      */
-    fun maxWindSpeed(): WeatherRecord? = records.maxWithOrNull(
-        compareBy(nullsFirst()) { it.windSpeed })
+    fun maxWindSpeed(): WeatherRecord? = queries.compute("maxWindSpeed") { _, value ->
+        value ?: records.maxWithOrNull(compareBy(nullsFirst()) { it.windSpeed })
+    }
 
     /**
      * Finds the record having the highest temperature.
      *
      * @return A record, or null if there are no measurements of temperature
      */
-    fun maxTemperature(): WeatherRecord? = records.maxWithOrNull(
-        compareBy(nullsFirst()) { it.temperature })
+    fun maxTemperature(): WeatherRecord? = queries.compute("maxTemperature") { _, value ->
+        value ?: records.maxWithOrNull(compareBy(nullsFirst()) { it.temperature })
+    }
 
     /**
      * Finds the record having the lowest humidity.
      *
      * @return A record, or null if there are no measurements of humidity
      */
-    fun minHumidity(): WeatherRecord? = records.minWithOrNull(
-        compareBy(nullsLast()) { it.humidity })
+    fun minHumidity(): WeatherRecord? = queries.compute("minHumidity") { _, value ->
+        value ?: records.minWithOrNull(compareBy(nullsLast()) { it.humidity })
+    }
 
     /**
      * Computes insolation for a given 24-hour period.
@@ -142,7 +161,7 @@ class WeatherDataset(filename: String) {
      * @param[date] Date for which insolation must be computed
      * @return Insolation (Joules per square metre) and number of hours, or `null`
      */
-    fun insolation(date: LocalDate): Pair<Double,Int>? {
+    fun insolation(date: LocalDate): Pair<Double, Int>? {
         with(records.filter { it.time.toLocalDate() == date }) {
             if (isEmpty()) return null
             val hours = count { it.solarIrradiance != null }
