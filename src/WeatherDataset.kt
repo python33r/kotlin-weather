@@ -31,7 +31,7 @@ private const val SECONDS_IN_AN_HOUR = 3600
  * speed, highest temperature and lowest humidity. You can also compute
  * total solar insolation for a given date.
  */
-class WeatherDataset private constructor() {
+class WeatherDataset(filename: String) {
     private val records = mutableListOf<WeatherRecord>()
 
     /**
@@ -40,12 +40,7 @@ class WeatherDataset private constructor() {
     var skipped: Int = 0
         private set
 
-    /**
-     * Creates a dataset from data in the given file.
-     *
-     * @param[filename] Name of file containing the data
-     */
-    constructor(filename: String): this() {
+    init {
         File(filename).useLines { lines ->
             lines.drop(1).forEach { createRecord(it) }
         }
