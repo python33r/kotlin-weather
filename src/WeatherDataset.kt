@@ -39,25 +39,15 @@ private const val SECONDS_IN_AN_HOUR = 3600
  * specified day.
  */
 class WeatherDataset(filename: String) {
-    private val records = mutableListOf<WeatherRecord>()
-
-    // Caches
-    private val missing = mutableMapOf<String, Int>()
-    private val queries = mutableMapOf<String, WeatherRecord?>()
-
-    /**
-     * Number of records skipped due to errors
-     */
-    var skipped: Int = 0
-        private set
-
-    init {
+    private val records = buildList {
         File(filename).useLines { lines ->
-            lines.drop(1).forEach { createRecord(it) }
+            lines.drop(1).forEach { line ->
+                parseRecord(line)?.let { add(it) }
+            }
         }
     }
 
-    private fun createRecord(line: String) {
+    private fun parseRecord(line: String): WeatherRecord? {
         with(line.split(",")) {
             when {
                 size != NUM_FIELDS -> ++skipped
@@ -69,15 +59,26 @@ class WeatherDataset(filename: String) {
                         val temp = get(TEMP_FIELD).toDoubleOrNull()
                         val sun = get(SUN_FIELD).toDoubleOrNull()
                         val humid = get(HUMID_FIELD).toDoubleOrNull()
-                        records.add(WeatherRecord(time, wind, temp, sun, humid))
+                        return WeatherRecord(time, wind, temp, sun, humid)
                     }
                     catch (error: DateTimeParseException) {
                         ++skipped
                     }
                 }
             }
+            return null
         }
     }
+
+    // Caches
+    private val missing = mutableMapOf<String, Int>()
+    private val queries = mutableMapOf<String, WeatherRecord?>()
+
+    /**
+     * Number of records skipped due to errors
+     */
+    var skipped: Int = 0
+        private set
 
     /**
      * Number of records in this dataset
