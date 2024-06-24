@@ -15,12 +15,16 @@ private const val SECONDS_IN_AN_HOUR = 3600
 /**
  * A sequence of weather records.
  *
- * A CSV file must be supplied in order to create a weather dataset.
- * Records from this file are stored and a count is kept of records that
- * couldn't be read successfully due to the wrong number of fields, or
- * a missing or badly formatted date & time field. Missing fields in one
- * line of the file map onto nulls in the corresponding record. You can
- * query a dataset to see how many missing measurements there are.
+ * The name of a CSV file must be supplied in order to create a weather
+ * dataset. Records from this file are stored and a count is kept of records
+ * that couldn't be read successfully due to the wrong number of fields,
+ * or a missing or badly formatted date & time field.
+ *
+ * Missing fields in one line of the CSV file map onto nulls in the
+ * corresponding record. You can query a dataset to see how many missing
+ * measurements there are, and the results of these queries are cached
+ * internally to avoid the potentially high cost of recalculation for large
+ * datasets.
  *
  * A weather dataset is somewhat list-like: you can query the number
  * of stored records via its `size` property, access an individual record
@@ -28,8 +32,11 @@ private const val SECONDS_IN_AN_HOUR = 3600
  * for loop.
  *
  * A dataset can be queried to find the records with the highest wind
- * speed, highest temperature and lowest humidity. You can also compute
- * total solar insolation for a given date.
+ * speed, highest temperature and lowest humidity. As with the counts of
+ * missing data, the results of these queries are cached. You can also
+ * compute total insolation for a given date - i.e. the total amount
+ * of solar energy incident upon a square metre of surface on the
+ * specified day.
  */
 class WeatherDataset(filename: String) {
     private val records = mutableListOf<WeatherRecord>()
