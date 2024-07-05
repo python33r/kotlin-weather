@@ -27,11 +27,16 @@ fun main(args: Array<String>) {
 
 private fun displaySummaryOf(dataset: WeatherDataset) {
     with(dataset) {
-        println("\n$size valid records, $skipped skipped\n")
-        println("Missing wind speed  : $missingWindSpeed")
-        println("Missing temperature : $missingTemperature")
-        println("Missing irradiance  : $missingIrradiance")
-        println("Missing humidity    : $missingHumidity")
+        println(
+            """
+
+            $size valid records, $skipped skipped
+
+            Missing wind speed  : $missingWindSpeed
+            Missing temperature : $missingTemperature
+            Missing irradiance  : $missingIrradiance
+            Missing humidity    : $missingHumidity
+            """.trimIndent())
     }
 }
 
