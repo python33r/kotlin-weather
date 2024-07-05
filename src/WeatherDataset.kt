@@ -141,6 +141,15 @@ class WeatherDataset(filename: String) {
     }
 
     /**
+     * Finds the record having the lowest temperature.
+     *
+     * @return A record, or `null` if there are no measurements of temperature
+     */
+    fun minTemperature(): WeatherRecord? = queries.compute("minTemperature") { _, value ->
+        value ?: records.minWithOrNull(compareBy(nullsLast()) { it.temperature })
+    }
+
+    /**
      * Finds the record having the highest temperature.
      *
      * @return A record, or `null` if there are no measurements of temperature
@@ -156,6 +165,15 @@ class WeatherDataset(filename: String) {
      */
     fun minHumidity(): WeatherRecord? = queries.compute("minHumidity") { _, value ->
         value ?: records.minWithOrNull(compareBy(nullsLast()) { it.humidity })
+    }
+
+    /**
+     * Finds the record having the highest humidity.
+     *
+     * @return A record, or `null` if there are no measurements of humidity
+     */
+    fun maxHumidity(): WeatherRecord? = queries.compute("maxHumidity") { _, value ->
+        value ?: records.maxWithOrNull(compareBy(nullsFirst()) { it.humidity })
     }
 
     /**

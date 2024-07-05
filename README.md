@@ -55,15 +55,17 @@ entire dataset:
 val firstRecord = dataset[0]
 
 for (record in dataset) {
-    println(record.temperature)
+    println(record.temperature ?: "?")
 }
 ```
 
 The following analysis methods are provided:
 
 * `maxWindSpeed()`, to find the record having the highest wind speed
+* `minTemperature()`, to find the record having the lowest temperature
 * `maxTemperature()`, to find the record having the highest temperature
 * `minHumidity()`, to find the record having the lowest humidity
+* `maxHumidity()`, to find the record having thr highest humidity
 
 Each of these can return `null` in the case of an empty dataset or a dataset
 in which measurements are not available for the meteorological parameter of
