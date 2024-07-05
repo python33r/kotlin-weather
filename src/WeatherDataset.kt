@@ -89,32 +89,32 @@ class WeatherDataset(filename: String) {
      * Number of missing wind speed measurements
      */
     val missingWindSpeed
-        get() = missing.compute("windSpeed") { _, value ->
-            value ?: records.count { it.windSpeed == null }
+        get() = missing.compute("windSpeed") {
+            _, value -> value ?: records.count { it.windSpeed == null }
         }
 
     /**
      * Number of missing temperature measurements
      */
     val missingTemperature
-        get() = missing.compute("temperature") { _, value ->
-            value ?: records.count { it.temperature == null }
+        get() = missing.compute("temperature") {
+            _, value -> value ?: records.count { it.temperature == null }
         }
 
     /**
      * Number of missing solar irradiance measurements
      */
     val missingIrradiance
-        get() = missing.compute("irradiance") { _, value ->
-            value ?: records.count { it.solarIrradiance == null }
+        get() = missing.compute("irradiance") {
+            _, value -> value ?: records.count { it.irradiance == null }
         }
 
     /**
      * Number of missing humidity measurements
      */
     val missingHumidity
-        get() = missing.compute("humidity") { _, value ->
-            value ?: records.count { it.humidity == null }
+        get() = missing.compute("humidity") {
+            _, value -> value ?: records.count { it.humidity == null }
         }
 
     /**
@@ -134,7 +134,7 @@ class WeatherDataset(filename: String) {
     /**
      * Finds the record having the highest wind speed.
      *
-     * @return A record, or null if there are no measurements of wind speed
+     * @return A record, or `null` if there are no measurements of wind speed
      */
     fun maxWindSpeed(): WeatherRecord? = queries.compute("maxWindSpeed") { _, value ->
         value ?: records.maxWithOrNull(compareBy(nullsFirst()) { it.windSpeed })
@@ -143,7 +143,7 @@ class WeatherDataset(filename: String) {
     /**
      * Finds the record having the highest temperature.
      *
-     * @return A record, or null if there are no measurements of temperature
+     * @return A record, or `null` if there are no measurements of temperature
      */
     fun maxTemperature(): WeatherRecord? = queries.compute("maxTemperature") { _, value ->
         value ?: records.maxWithOrNull(compareBy(nullsFirst()) { it.temperature })
@@ -152,7 +152,7 @@ class WeatherDataset(filename: String) {
     /**
      * Finds the record having the lowest humidity.
      *
-     * @return A record, or null if there are no measurements of humidity
+     * @return A record, or `null` if there are no measurements of humidity
      */
     fun minHumidity(): WeatherRecord? = queries.compute("minHumidity") { _, value ->
         value ?: records.minWithOrNull(compareBy(nullsLast()) { it.humidity })
@@ -172,8 +172,8 @@ class WeatherDataset(filename: String) {
     fun insolation(date: LocalDate): Pair<Double, Int>? {
         with(records.filter { it.time.toLocalDate() == date }) {
             if (isEmpty()) return null
-            val hours = count { it.solarIrradiance != null }
-            val insolation = SECONDS_IN_AN_HOUR * sumOf { it.solarIrradiance ?: 0.0 }
+            val hours = count { it.irradiance != null }
+            val insolation = SECONDS_IN_AN_HOUR * sumOf { it.irradiance ?: 0.0 }
             return Pair(insolation, hours)
         }
     }

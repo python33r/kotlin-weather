@@ -2,23 +2,25 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter as Formatter
 
 /**
- * A single record from a weather station.
+ * A set of weather station measurements made at a given point in time.
  *
- * A record consists of:
- * - Combined date & time
- * - Wind speed (metres per second)
- * - Air temperature (Celsius)
- * - Solar irradiance (Watts per square metre)
- * - Relative humidity (%)
+ * Time of measurement is always required but the measurement values
+ * can be `null` in order to represent missing data. Data might be
+ * missing for a variety of reasons (a fault, unavailability due
+ * to maintenance of instruments, or simply an inability to make a
+ * valid measurement).
  *
- * A proper date & time is always required but the meteorological
- * properties can be null in order to represent missing measurements.
+ * @property[time] Combined date & time of the measurements
+ * @property[windSpeed] Wind speed in metres per second
+ * @property[temperature] Air temperature in Celsius
+ * @property[irradiance] Solar irradiance (Watts per square metre)
+ * @property[humidity] Relative humidity (%)
  */
 data class WeatherRecord(
     val time: LocalDateTime,
     val windSpeed: Double?,
     val temperature: Double?,
-    val solarIrradiance: Double?,
+    val irradiance: Double?,
     val humidity: Double?
 ) {
     companion object {
@@ -37,7 +39,7 @@ data class WeatherRecord(
         append(",")
         append(temperature ?: "")
         append(",")
-        append(solarIrradiance ?: "")
+        append(irradiance ?: "")
         append(",")
         append(humidity ?: "")
     }
