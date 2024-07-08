@@ -17,7 +17,7 @@ fun main(args: Array<String>) {
     try {
         WeatherDataset(args[0])
             .also { displaySummaryOf(it) }
-            .also { displayWeatherInfoFor(it) }
+            .also { displayStatsFor(it) }
     }
     catch (error: Exception) {
         println("Error: ${error.message}")
@@ -40,47 +40,42 @@ private fun displaySummaryOf(dataset: WeatherDataset) {
     }
 }
 
-private fun displayWeatherInfoFor(dataset: WeatherDataset) {
+private fun displayStatsFor(dataset: WeatherDataset) {
     displayMaxWindSpeed(dataset)
-    displayHumidities(dataset)
-    displayTempsAndInsolations(dataset)
+
+    dataset.minHumidity()?.let {
+        displayHumidity("Lowest", it)
+    }
+    dataset.maxHumidity()?.let {
+        displayHumidity("Highest", it)
+    }
+
+    dataset.minTemperature()?.let {
+        displayTemperature("Lowest", it)
+    }
+    dataset.maxTemperature()?.let {
+        displayTemperature("Highest", it)
+    }
 }
 
 private fun displayMaxWindSpeed(dataset: WeatherDataset) {
     dataset.maxWindSpeed()?.let {
         printf("\nHighest wind speed = %.1f m/s\n", it.windSpeed)
-        printf("(Measurement made at %s)\n\n", it.time)
+        printf("(Measurement made at %s on %s)\n\n",
+            it.time.toLocalTime(), it.time.toLocalDate())
     }
 }
 
-private fun displayHumidities(dataset: WeatherDataset) {
-    dataset.minHumidity()?.let {
-        printf("Lowest humidity = %.1f%%\n", it.humidity)
-        printf("(Measured at %s)\n\n", it.time)
-    }
-    dataset.maxHumidity()?.let {
-        printf("Highest humidity = %.1f%%\n", it.humidity)
-        printf("(Measured at %s)\n\n", it.time)
-    }
+private fun displayHumidity(description: String, rec: WeatherRecord) {
+    printf("%s humidity = %.1f%%\n", description, rec.humidity)
+    printf("(Measured at %s on %s)\n\n",
+        rec.time.toLocalTime(), rec.time.toLocalDate())
 }
 
-private fun displayTempsAndInsolations(dataset: WeatherDataset) {
-    dataset.minTemperature()?.let {
-        printf("Lowest temperature = %.1f\u00b0C\n", it.temperature)
-        printf("(Measured at %s)\n", it.time)
-        val date = it.time.toLocalDate()
-        dataset.insolation(date)?.let { result ->
-            printf("Insolation on %s = %.4g J/m\u00b2\n\n", date, result.first)
-        }
-    }
-    dataset.maxTemperature()?.let {
-        printf("Highest temperature = %.1f\u00b0C\n", it.temperature)
-        printf("(Measured at %s)\n", it.time)
-        val date = it.time.toLocalDate()
-        dataset.insolation(date)?.let { result ->
-            printf("Insolation on %s = %.4g J/m\u00b2\n\n", date, result.first)
-        }
-    }
+private fun displayTemperature(description: String, rec: WeatherRecord) {
+    printf("%s temperature = %.1f\u00b0C\n", description, rec.temperature)
+    printf("(Measured at %s on %s)\n\n",
+        rec.time.toLocalTime(), rec.time.toLocalDate())
 }
 
 private fun printf(fmt: String, vararg items: Any?) {
