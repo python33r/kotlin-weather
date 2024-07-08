@@ -16,7 +16,7 @@ fun main(args: Array<String>) {
 
     try {
         WeatherDataset(args[0])
-            .also { displaySummaryOf(it) }
+            .also { summarize(it) }
             .also { displayStatsFor(it) }
     }
     catch (error: Exception) {
@@ -25,7 +25,7 @@ fun main(args: Array<String>) {
     }
 }
 
-private fun displaySummaryOf(dataset: WeatherDataset) {
+private fun summarize(dataset: WeatherDataset) {
     with(dataset) {
         println(
             """
@@ -42,20 +42,10 @@ private fun displaySummaryOf(dataset: WeatherDataset) {
 
 private fun displayStatsFor(dataset: WeatherDataset) {
     displayMaxWindSpeed(dataset)
-
-    dataset.minHumidity()?.let {
-        displayHumidity("Lowest", it)
-    }
-    dataset.maxHumidity()?.let {
-        displayHumidity("Highest", it)
-    }
-
-    dataset.minTemperature()?.let {
-        displayTemperature("Lowest", it)
-    }
-    dataset.maxTemperature()?.let {
-        displayTemperature("Highest", it)
-    }
+    dataset.minHumidity()?.let { displayHumidity("Lowest", it) }
+    dataset.maxHumidity()?.let { displayHumidity("Highest", it) }
+    dataset.minTemperature()?.let { displayTemperature("Lowest", it) }
+    dataset.maxTemperature()?.let { displayTemperature("Highest", it) }
 }
 
 private fun displayMaxWindSpeed(dataset: WeatherDataset) {
