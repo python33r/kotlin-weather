@@ -3,7 +3,7 @@ package org.efford.weather
 import kotlin.system.exitProcess
 
 /**
- * Program entry point.
+ * Program to compute various statistics for weather station data.
  *
  * A dataset filename must be provided on the command line.
  *
