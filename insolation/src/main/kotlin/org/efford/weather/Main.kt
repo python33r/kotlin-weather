@@ -4,9 +4,9 @@ import java.time.LocalDate
 import kotlin.system.exitProcess
 
 /**
- * Program entry point.
+ * Program to compute insolation from weather station data.
  *
- * A dataset filename & ISO-8601 date must be provided on the command line.
+ * A dataset filename & ISO 8601 date must be provided on the command line.
  *
  * @param[args] Array of command line arguments
  */
@@ -29,9 +29,13 @@ fun main(args: Array<String>) {
 
 private fun displayInsolation(dataset: WeatherDataset, date: LocalDate) {
     dataset.insolation(date)?.let {
-        println(String.format("Insolation on %s = %.4g J/m\u00b2", date, it.first))
-        println("Computed for ${it.second} hours of measurements")
+        printf("\n%d hours of measurements for %s\n\n", it.second, date)
+        printf("Insolation = %.4g J/m\u00b2\n\n", it.first)
         return
     }
-    println("Date not found in dataset!")
+    println("\nNo data for $date\n")
+}
+
+private fun printf(fmt: String, vararg args: Any?) {
+    print(String.format(fmt, *args))
 }
