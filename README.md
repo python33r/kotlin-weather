@@ -1,28 +1,19 @@
 # kotlin-weather
 
-Kotlin classes and a Kotlin application for analysing weather station data
-read from a CSV file - see `data/README.md` for details of the format.
+A Kotlin library and associated applications for analysing weather
+station data read from a CSV file - see `data/README.md` for details
+of the format.
 
 Note: `LICENSE` applies to the Kotlin code. The CSV files in the `data`
 directory are covered by the [Open Government License][ogl].
 
-## Application
+## Library
 
-You can build the application from the command line with:
-
+This consists of two classes: `WeatherRecord` and `WeatherDataset`.
+You can run the tests for these classes with
 ```shell
-kotlinc -d weather.jar -include-runtime src/*.kt
+./gradlew :lib:test
 ```
-
-You can subsequently run it with
-
-```shell
-kotlin weather.jar data/leeds_2019.csv
-```
-
-The application expects a CSV file as the sole command line argument.
-
-## Class Details
 
 A `WeatherRecord` object captures a subset of the data in one record
 from the CSV file, specifically: date & time, wind speed (metres per second),
@@ -87,6 +78,51 @@ for the given date, otherwise a `Pair` containing the computed insolation
 and the number of hours over which solar irradiance was integrated.
 `Pair(0.0, 0)` will be returned if the date is valid but no measurements
 of irradiance were acquired on that date for some reason.
+
+## Applications
+
+### stats
+
+This application takes the path to a CSV file of weather data as its sole
+command line argument.
+
+It reports on
+
+* Numbers of processed and skipped records
+* How many missing measurements there were in the dataset
+* Maximum wind speed, and the time on which this was measured
+* Minimum & maximum temperature, and the times on which these were measured
+* Minimum & maximum humidity, and the times on which these were measured
+
+You can test the application with Gradle using
+```shell
+./gradlew :stats:run
+```
+
+You can package the application for distribution like so:
+```shell
+./gradlew :stats:distZip
+```
+
+### insolation
+
+This application takes the path to a CSV file of weather data and a date
+as command line arguments. The date should be formatted according to
+ISO 8601, i.e., YYYY-MM-DD.
+
+The application computes insolation on the specified date by integrating
+solar irradiance measurements over that date. It displays both the computed
+value and the number of hours over which it was computed.
+
+You can test the application with Gradle using
+```shell
+./gradlew :insolation:run
+```
+
+You can package the application for distribution like so:
+```shell
+./gradlew :insolation:distZip
+```
 
 [ogl]: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
 [ins]: https://en.wikipedia.org/wiki/Solar_irradiance
