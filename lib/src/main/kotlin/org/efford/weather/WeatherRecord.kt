@@ -29,6 +29,12 @@ data class WeatherRecord(
         val TIME_FORMAT: Formatter = Formatter.ofPattern("dd/MM/yyyy HH:mm")
     }
 
+    init {
+        windSpeed?.let { require(it >= 0.0) { "Wind speed cannot be negative" } }
+        irradiance?.let { require(it >= 0.0) { "Irradiance cannot be negative" } }
+        humidity?.let { require(it >= 0.0) { "Humidity cannot be negative" } }
+    }
+
     /**
      * Generates a CSV-formatted string representation of this record.
      *
