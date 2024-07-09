@@ -16,7 +16,7 @@ kotlin {
 }
 
 application {
-    mainClass = "org.efford.weather.MainKt"
+    mainClass = "org.efford.weather.InsolationKt"
 }
 
 tasks.named<JavaExec>("run") {
