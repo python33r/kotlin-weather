@@ -1,3 +1,5 @@
+package org.efford.weather
+
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter as Formatter
 

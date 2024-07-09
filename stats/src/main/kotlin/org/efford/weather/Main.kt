@@ -1,3 +1,5 @@
+package org.efford.weather
+
 import kotlin.system.exitProcess
 
 /**

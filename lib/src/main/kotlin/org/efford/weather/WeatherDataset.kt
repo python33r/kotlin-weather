@@ -1,3 +1,5 @@
+package org.efford.weather
+
 import java.io.File
 import java.time.LocalDate
 import java.time.LocalDateTime
