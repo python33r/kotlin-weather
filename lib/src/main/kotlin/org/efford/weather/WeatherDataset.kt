@@ -1,6 +1,5 @@
 package org.efford.weather
 
-import java.io.File
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeParseException
@@ -15,12 +14,13 @@ private const val HUMID_FIELD = 7
 private const val SECONDS_IN_AN_HOUR = 3600
 
 /**
- * A sequence of weather records.
+ * A sequence of records from a weather station.
  *
- * The name of a CSV file must be supplied in order to create a weather
- * dataset. Records from this file are stored and a count is kept of records
- * that couldn't be read successfully due to the wrong number of fields,
- * or a missing or badly formatted date & time field.
+ * A `WeatherFile` object representing the path to a CSV file of weather
+ * data must be supplied in order to create a weather dataset. Records
+ * from this file are stored and a count is kept of records that couldn't
+ * be read successfully due to the wrong number of fields, or a missing
+ * or badly formatted date & time field.
  *
  * Missing fields in one line of the CSV file map onto nulls in the
  * corresponding record. You can query a dataset to see how many missing
@@ -40,35 +40,33 @@ private const val SECONDS_IN_AN_HOUR = 3600
  * of solar energy incident upon a square metre of surface on the
  * specified day.
  */
-class WeatherDataset(filename: String) {
+class WeatherDataset(dataFile: WeatherFile) {
     private val records = buildList {
-        File(filename).useLines { lines ->
-            lines.drop(1).forEach { line ->
-                parseRecord(line)?.let { add(it) }
-            }
+        dataFile.readLines().forEach {
+            line -> createRecord(line)?.let { add(it) }
         }
     }
 
-    private fun parseRecord(line: String): WeatherRecord? {
+    private fun createRecord(line: String): WeatherRecord? {
         with(line.split(",")) {
             when {
-                size != NUM_FIELDS -> ++skipped
-                get(TIME_FIELD).isBlank() -> ++skipped
-                else -> {
-                    try {
-                        val time = LocalDateTime.parse(get(TIME_FIELD), WeatherRecord.TIME_FORMAT)
-                        val wind = get(WIND_FIELD).toDoubleOrNull()
-                        val temp = get(TEMP_FIELD).toDoubleOrNull()
-                        val sun = get(SUN_FIELD).toDoubleOrNull()
-                        val humid = get(HUMID_FIELD).toDoubleOrNull()
-                        return WeatherRecord(time, wind, temp, sun, humid)
-                    }
-                    catch (error: DateTimeParseException) {
-                        ++skipped
-                    }
+                size != NUM_FIELDS || get(TIME_FIELD).isBlank() -> {
+                    ++skipped
+                    return null
+                }
+                else -> try {
+                    val time = LocalDateTime.parse(get(TIME_FIELD), WeatherRecord.TIME_FORMAT)
+                    val wind = get(WIND_FIELD).toDoubleOrNull()
+                    val temp = get(TEMP_FIELD).toDoubleOrNull()
+                    val sun = get(SUN_FIELD).toDoubleOrNull()
+                    val humid = get(HUMID_FIELD).toDoubleOrNull()
+                    return WeatherRecord(time, wind, temp, sun, humid)
+                }
+                catch (error: DateTimeParseException) {
+                    ++skipped
+                    return null
                 }
             }
-            return null
         }
     }
 

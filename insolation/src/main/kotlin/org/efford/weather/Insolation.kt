@@ -17,8 +17,9 @@ fun main(args: Array<String>) {
     }
 
     try {
+        val file = WeatherFile(args[0])
         val date = LocalDate.parse(args[1])
-        WeatherDataset(args[0])
+        WeatherDataset(file)
             .also { displayInsolation(it, date) }
     }
     catch (error: Exception) {

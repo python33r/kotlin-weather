@@ -16,7 +16,8 @@ fun main(args: Array<String>) {
     }
 
     try {
-        WeatherDataset(args[0])
+        val file = WeatherFile(args[0])
+        WeatherDataset(file)
             .also { summarize(it) }
             .also { displayStatsFor(it) }
     }
