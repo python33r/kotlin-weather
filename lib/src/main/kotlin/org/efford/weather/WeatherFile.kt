@@ -18,7 +18,7 @@ class WeatherFile(location: String) {
     }
 
     /**
-     * Reads lines of data from this file.
+     * Obtains lines of data from this file.
      *
      * The file is checked for the existence of a valid header line,
      * but the header itself is not returned.
@@ -27,7 +27,7 @@ class WeatherFile(location: String) {
      * @throws IOException if the file is empty, or there is no valid header,
      *   or reading a line of data failed
      */
-    fun readLines() = sequence {
+    fun lines() = sequence {
         val reader = path.toFile().bufferedReader()
         reader.use {
             val first = reader.readLine() ?: throw IOException("No header found")

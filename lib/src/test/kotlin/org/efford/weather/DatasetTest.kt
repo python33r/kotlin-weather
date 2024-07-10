@@ -18,7 +18,7 @@ class DatasetTest: StringSpec({
     isolationMode = IsolationMode.InstancePerTest
 
     val validFile = mock<WeatherFile> {
-        on { readLines() } doReturn sequenceOf(
+        on { lines() } doReturn sequenceOf(
             "01/07/2019 09:00,7.38,267.7,13.78,15.378,15.66,174.9,75.8",
             "01/07/2019 10:00,6.83,265.1,14.38,15.476,15.78,149.7,76.6",
             "01/07/2019 11:00,5.525,272.4,17.87,15.7,15.96,107.6,75.5",

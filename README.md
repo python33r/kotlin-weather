@@ -9,11 +9,17 @@ directory are covered by the [Open Government License][ogl].
 
 ## Library
 
-This consists of two classes: `WeatherRecord` and `WeatherDataset`.
-You can run the tests for these classes with
+This consists of three classes: `WeatherFile`, `WeatherRecord` and
+`WeatherDataset`. You can run the tests for these classes with
 ```shell
 ./gradlew :lib:test
 ```
+
+`WeatherFile` represents a CSV file containing weather station data.
+It does some basic checking that the file exists and that it has a valid
+header when you attempt to read from it. Calling the `lines()` method will
+return a sequence of lines from the file but this class does  no further
+processing of the data, leaving that task to `WeatherDataset`.
 
 A `WeatherRecord` object captures a subset of the data in one record
 from the CSV file, specifically: date & time, wind speed (metres per second),
@@ -23,15 +29,18 @@ nulls being used to indicate a particular measurement is unavailable for
 the date & time in question.
 
 A `WeatherDataset` object encapsulates a sequence of `WeatherRecord` objects
-created from data in a CSV file. The filename is supplied when constructing
-the dataset:
+created from data in a CSV file. The file is specified as a `WeatherFile`
+object. This object's `lines()` method will be invoked by `WeatherDataset`
+in order to read the data.
 
 ```kotlin
-val dataset = WeatherDataset("weather.csv")
+val file = WeatherFile("weather.csv")
+val dataset = WeatherDataset(file)
 ```
 
-Records with the wrong number of fields, or a missing date & time field,
-or a badly formatted date & time field, will be skipped.
+When processing the data read from the file, records with the wrong number
+of fields, or a missing date & time field, or a badly formatted date & time
+field, will be skipped.
 
 Once you have created a dataset, you can access the `size` and `skipped`
 properties to see how many records from the CSV file were stored and how
@@ -74,8 +83,8 @@ dataset.insolation(date)?.let {
 ```
 
 Note that the `insolation` method returns `null` if no records are available
-for the given date, otherwise a `Pair` containing the computed insolation
-and the number of hours over which solar irradiance was integrated.
+for the given date, otherwise it returns a `Pair` containing the computed
+insolation and the number of hours over which solar irradiance was integrated.
 `Pair(0.0, 0)` will be returned if the date is valid but no measurements
 of irradiance were acquired on that date for some reason.
 

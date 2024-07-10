@@ -16,16 +16,16 @@ private const val SECONDS_IN_AN_HOUR = 3600
 /**
  * A sequence of records from a weather station.
  *
- * A `WeatherFile` object representing the path to a CSV file of weather
- * data must be supplied in order to create a weather dataset. Records
- * from this file are stored and a count is kept of records that couldn't
- * be read successfully due to the wrong number of fields, or a missing
- * or badly formatted date & time field.
+ * A `WeatherFile` object representing a CSV file of weather data must be
+ * supplied in order to create a weather dataset. Records from this file are
+ * stored and a count is kept of records that couldn't be read successfully
+ * due to the wrong number of fields, or a missing or badly formatted
+ * date & time field.
  *
  * Missing fields in one line of the CSV file map onto nulls in the
  * corresponding record. You can query a dataset to see how many missing
  * measurements there are, and the results of these queries are cached
- * internally to avoid the potentially high cost of recalculation for large
+ * internally to avoid the potentially high cost of recalculation in large
  * datasets.
  *
  * A weather dataset is somewhat list-like: you can query the number
@@ -42,8 +42,8 @@ private const val SECONDS_IN_AN_HOUR = 3600
  */
 class WeatherDataset(dataFile: WeatherFile) {
     private val records = buildList {
-        dataFile.readLines().forEach {
-            line -> createRecord(line)?.let { add(it) }
+        dataFile.lines().forEach { line ->
+            createRecord(line)?.let { add(it) }
         }
     }
 
