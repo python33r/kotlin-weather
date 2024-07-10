@@ -94,9 +94,13 @@ It reports on
 * Minimum & maximum temperature, and the times on which these were measured
 * Minimum & maximum humidity, and the times on which these were measured
 
-You can test the application with Gradle using
+You can try out the application with Gradle using
 ```shell
 ./gradlew :stats:run
+```
+Use `--args` to override the hard-coded input filename, e.g.,
+```shell
+./gradlew :stats:run --args="../data/leeds_2011-2018.csv"
 ```
 
 You can package the application for distribution like so:
@@ -114,7 +118,7 @@ The application computes insolation on the specified date by integrating
 solar irradiance measurements over that date. It displays both the computed
 value and the number of hours over which it was computed.
 
-You can test the application with Gradle using
+You can try out the application with Gradle using
 ```shell
 ./gradlew :insolation:run
 ```
