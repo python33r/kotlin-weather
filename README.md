@@ -18,7 +18,7 @@ This consists of three classes: `WeatherFile`, `WeatherRecord` and
 `WeatherFile` represents a CSV file containing weather station data.
 It does some basic checking that the file exists and that it has a valid
 header when you attempt to read from it. Calling the `lines()` method will
-return a sequence of lines from the file but this class does  no further
+return a sequence of lines from the file but this class does no further
 processing of the data, leaving that task to `WeatherDataset`.
 
 A `WeatherRecord` object captures a subset of the data in one record
@@ -130,6 +130,10 @@ value and the number of hours over which it was computed.
 You can try out the application with Gradle using
 ```shell
 ./gradlew :insolation:run
+```
+You can specify your own command line arguments using the `--args` option:
+```shell
+./gradlew :insolation:run --args="../data/leeds_2019.csv 2019-04-19"
 ```
 
 You can package the application for distribution like so:

@@ -4,6 +4,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.shouldBe
 import java.io.FileNotFoundException
 import java.io.IOException
 
@@ -25,6 +26,10 @@ class FileTest: StringSpec({
         shouldThrowExactly<IOException> {
             WeatherFile("../testdata/no-header.csv").lines().toList()
         }
+    }
+
+    "No data if file contains only a header" {
+        WeatherFile("../testdata/header-only.csv").lines().toList() shouldBe emptyList()
     }
 
     "Lines of data read correctly" {
