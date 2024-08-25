@@ -65,7 +65,7 @@ The following analysis methods are provided:
 * `minTemperature()`, to find the record having the lowest temperature
 * `maxTemperature()`, to find the record having the highest temperature
 * `minHumidity()`, to find the record having the lowest humidity
-* `maxHumidity()`, to find the record having thr highest humidity
+* `maxHumidity()`, to find the record having the highest humidity
 
 Each of these can return `null` in the case of an empty dataset or a dataset
 in which measurements are not available for the meteorological parameter of
